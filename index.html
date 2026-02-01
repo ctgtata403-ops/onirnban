@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anirban - Admin Pro & Fixed</title>
+    <title>অনির্বাণ - পূর্ণাঙ্গ সংস্করণ</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
         body { font-family: 'Anek Bangla', sans-serif; background: radial-gradient(circle at center, #0a1f1a 0%, #040d0b 100%); color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; overflow-x: hidden; }
-        .card { text-align: center; background: rgba(10, 31, 26, 0.6); padding: 25px; border-radius: 40px; width: 100%; max-width: 350px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); border: 1px solid rgba(0, 255, 150, 0.1); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; }
+        .card { text-align: center; background: rgba(10, 31, 26, 0.6); padding: 25px; border-radius: 40px; width: 100%; max-width: 350px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); border: 1px solid rgba(0, 255, 150, 0.1); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; position: relative; }
         
-        #badge { font-size: 0.85rem; background: rgba(0, 255, 204, 0.1); color: #00ffcc; padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(0, 255, 204, 0.2); cursor: pointer; font-weight: 700; display: inline-block; margin-bottom: 5px; }
-        
-        .title-area { cursor: pointer; user-select: none; }
-        h1 { font-weight: 800; font-size: 2.2rem; margin: 10px 0; background: linear-gradient(to right, #ffffff, #00ffcc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #badge { font-size: 0.85rem; background: rgba(0, 255, 204, 0.1); color: #00ffcc; padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(0, 255, 204, 0.2); cursor: pointer; font-weight: 700; margin-bottom: 5px; transition: 0.3s; }
+        #badge:hover { background: rgba(0, 255, 204, 0.2); }
 
-        .progress-section { width: 100%; display: flex; align-items: center; gap: 10px; margin: 30px 0 20px; }
+        h1 { font-weight: 800; font-size: 2.2rem; margin: 10px 0; background: linear-gradient(to right, #ffffff, #00ffcc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; user-select: none; }
+
+        .progress-section { width: 100%; display: flex; align-items: center; gap: 10px; margin: 35px 0 20px; }
         .lvl-label { font-size: 0.75rem; color: rgba(0, 255, 204, 0.5); font-weight: 700; width: 60px; }
         .progress-wrapper { position: relative; flex-grow: 1; height: 8px; }
         .progress-container { width: 100%; background: rgba(255, 255, 255, 0.05); border-radius: 10px; height: 100%; overflow: hidden; }
@@ -26,36 +26,32 @@
         .walker-icon img { width: 100%; height: 100%; filter: invert(1) sepia(1) saturate(5) hue-rotate(120deg); }
 
         .days-number { font-size: 7rem; font-weight: 800; line-height: 1; display: block; background: linear-gradient(to bottom, #ffffff 40%, #004d40 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* অতিক্রান্ত দিন লেখার জন্য নতুন স্টাইল (সাদা ও স্পষ্ট) */
+        .days-label { color: #ffffff; font-weight: 600; font-size: 1rem; opacity: 1; margin-top: 5px; display: block; }
+
         .sub-counter { font-size: 1.1rem; color: #ffffff; margin: 15px 0; font-weight: 500; opacity: 0.9; }
 
-        .quote-box { width: 90%; margin: 15px 0; padding: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 15px; border-left: 3px solid #00ffcc; text-align: left; }
-        .quote-text { font-size: 0.85rem; color: #ccc; font-style: italic; line-height: 1.4; margin: 0; }
-        .quote-author { font-size: 0.7rem; color: #00ffcc; font-weight: 700; margin-top: 5px; display: block; }
+        .quote-box { width: 90%; margin: 15px 0; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 15px; border-left: 3px solid #00ffcc; text-align: left; }
+        .quote-text { font-size: 0.9rem; color: #ccc; font-style: italic; line-height: 1.5; margin: 0; }
+        .quote-author { font-size: 0.75rem; color: #00ffcc; font-weight: 700; margin-top: 8px; display: block; }
 
-        /* Main Interface Reset Button */
-        .reset-btn { font-family: 'Anek Bangla'; background: rgba(255, 255, 255, 0.03); color: #00ffcc; border: 1px solid rgba(0, 255, 204, 0.3); padding: 14px; border-radius: 18px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 15px; }
-        .reset-btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+        .reset-btn { font-family: 'Anek Bangla'; background: rgba(255, 255, 255, 0.03); color: #00ffcc; border: 1px solid rgba(0, 255, 204, 0.3); padding: 14px; border-radius: 18px; font-size: 1.1rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 15px; }
 
-        /* Modals */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(8px); }
-        .modal-content { background: #0a1f1a; margin: 10% auto; padding: 25px; border: 1px solid #00ffcc; width: 85%; max-width: 320px; border-radius: 30px; text-align: left; }
+        .modal-content { background: #0a1f1a; margin: 10% auto; padding: 25px; border: 1px solid #00ffcc; width: 85%; max-width: 320px; border-radius: 30px; text-align: left; max-height: 75vh; overflow-y: auto; }
         
-        .roadmap-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #666; font-size: 0.9rem; }
+        .roadmap-item, .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.9rem; }
         .roadmap-item.achieved { color: #00ffcc; font-weight: 700; }
-        
-        .admin-label { font-size: 0.8rem; color: #00ffcc; margin-top: 10px; display: block; }
-        .admin-input { width: 90%; padding: 12px; background: #040d0b; border: 1px solid #333; color: #fff; border-radius: 12px; margin-bottom: 10px; font-family: 'Anek Bangla'; }
-        .admin-btn { background: #00ffcc; color: #000; border: none; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; }
+        .admin-input { width: 92%; padding: 12px; background: #040d0b; border: 1px solid #333; color: #fff; border-radius: 12px; margin-top: 5px; font-family: 'Anek Bangla'; }
+        .admin-btn { background: #00ffcc; color: #000; border: none; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; font-family: 'Anek Bangla'; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div id="badge" onclick="showBadgeDetails()">নতুন শুরু</div>
-    
-    <div class="title-area" ondblclick="handleAdminAccess()">
-        <h1>অনির্বাণ</h1>
-    </div>
+    <div id="badge" onclick="showBadgeDetails()">যাত্রা শুরু</div>
+    <h1 ondblclick="handleAdminAccess()">অনির্বাণ</h1>
     
     <div class="progress-section">
         <span class="lvl-label" id="startLevel">...</span>
@@ -68,9 +64,8 @@
 
     <div class="main-counter">
         <span class="days-number" id="days">০</span>
-        <span style="color:rgba(255,255,255,0.15); font-weight:600; font-size: 0.9rem;">অতিক্রান্ত দিন</span>
+        <span class="days-label">অতিক্রান্ত দিন</span>
     </div>
-
     <div class="sub-counter" id="time-detail">...</div>
 
     <div class="quote-box">
@@ -78,61 +73,51 @@
         <span class="quote-author" id="quoteAuthor">...</span>
     </div>
 
-    <button class="reset-btn" onclick="resetStreak()">রিসেট স্ট্রিক</button>
+    <button class="reset-btn" onclick="openResetModal()">রিসেট স্ট্রিক</button>
 </div>
 
-<div id="badgeModal" class="modal">
+<div id="roadmapModal" class="modal">
     <div class="modal-content">
-        <div style="color:#00ffcc; font-size:1.2rem; font-weight:800; border-bottom:1px solid #222; padding-bottom:10px;">রোডম্যাপ</div>
+        <div style="color:#00ffcc; font-size:1.2rem; font-weight:800; border-bottom:1px solid #222; padding-bottom:10px;">ব্যাজ রোডম্যাপ 🏆</div>
         <div id="roadmapList" style="margin-top:10px;"></div>
-        <button class="admin-btn" onclick="closeModal()">ঠিক আছে</button>
+        <button class="admin-btn" onclick="closeModal('roadmapModal')">ঠিক আছে</button>
+    </div>
+</div>
+
+<div id="resetModal" class="modal">
+    <div class="modal-content">
+        <div style="color:#00ffcc; font-size:1.2rem; font-weight:800;">রিসেট নোট 📝</div>
+        <textarea id="resetNoteInput" class="admin-input" style="height:80px; resize:none;" placeholder="কেন রিসেট করছেন? (ঐচ্ছিক)"></textarea>
+        <button class="admin-btn" style="background:#ff4444; color:white;" onclick="confirmReset()">রিসেট নিশ্চিত করুন</button>
+        <button class="admin-btn" style="background:#222; color:white;" onclick="closeModal('resetModal')">বাতিল</button>
+    </div>
+</div>
+
+<div id="historyModal" class="modal">
+    <div class="modal-content">
+        <div style="color:#00ffcc; font-size:1.2rem; font-weight:800; border-bottom:1px solid #222; padding-bottom:10px;">পুরানো নোটসমূহ 📜</div>
+        <div id="historyList" style="margin-top:10px;"></div>
+        <button class="admin-btn" onclick="closeModal('historyModal')">ঠিক আছে</button>
     </div>
 </div>
 
 <div id="adminModal" class="modal">
     <div class="modal-content">
         <div style="font-size:1.3rem; font-weight:800; color:#00ffcc; margin-bottom:15px;">অ্যাডমিন কন্ট্রোল 🛠️</div>
-        
-        <label class="admin-label">দিন (Days)</label>
-        <input type="number" id="admDays" class="admin-input" placeholder="যেমন: ৫">
-        
-        <label class="admin-label">ঘণ্টা (Hours)</label>
-        <input type="number" id="admHours" class="admin-input" placeholder="যেমন: ১২">
-        
-        <button class="admin-btn" onclick="setAdminTime()">টাইম সেট করুন</button>
-        <button class="admin-btn" style="background:#222; color:#fff;" onclick="closeAdmin()">বন্ধ করুন</button>
+        <label style="font-size:0.8rem;">দিন সেট:</label>
+        <input type="number" id="admDays" class="admin-input">
+        <label style="font-size:0.8rem;">ঘণ্টা সেট:</label>
+        <input type="number" id="admHours" class="admin-input">
+        <button class="admin-btn" onclick="setAdminTime()">আপডেট</button>
+        <button class="admin-btn" style="background:#ffcc00; color:black;" onclick="showHistory()">নোটের ইতিহাস</button>
+        <button class="admin-btn" style="background:#ff4444; color:white;" onclick="confettiEffect()">উৎসব মোড 🎉</button>
+        <button class="admin-btn" style="background:#222;" onclick="closeModal('adminModal')">বন্ধ</button>
     </div>
 </div>
 
 <script>
     function toBengali(num) { return num.toLocaleString('bn-BD'); }
 
-    // Admin Access with NEW Password: 68156094
-    function handleAdminAccess() {
-        let p = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
-        if (p === "68156094") {
-            document.getElementById('adminModal').style.display = "block";
-        } else if (p !== null) {
-            alert("ভুল পাসওয়ার্ড!");
-        }
-    }
-
-    function closeAdmin() { document.getElementById('adminModal').style.display = "none"; }
-
-    function setAdminTime() {
-        let d = parseInt(document.getElementById('admDays').value) || 0;
-        let h = parseInt(document.getElementById('admHours').value) || 0;
-        
-        // Convert to Milliseconds
-        let totalMs = (d * 86400 * 1000) + (h * 3600 * 1000);
-        let newStartTime = new Date().getTime() - totalMs;
-        
-        localStorage.setItem('onirbanStartTime', newStartTime);
-        alert("সময় আপডেট করা হয়েছে!");
-        location.reload();
-    }
-
-    // App Logic
     const levels = [
         { name: "🌑 নতুন শুরু", time: 0 },
         { name: "🌱 নবিশ", time: 60 },
@@ -141,30 +126,40 @@
         { name: "🏆 কিংবদন্তি", time: 30 * 86400 }
     ];
 
-    function updateApp() {
-        let start = localStorage.getItem('onirbanStartTime');
-        if (!start) { start = new Date().getTime(); localStorage.setItem('onirbanStartTime', start); }
-        const diff = Math.floor((new Date().getTime() - start) / 1000);
-        
-        document.getElementById('days').innerText = toBengali(Math.floor(diff / 86400));
-        document.getElementById('time-detail').innerText = `${toBengali(Math.floor((diff % 86400) / 3600))} ঘণ্টা : ${toBengali(Math.floor((diff % 3600) / 60))} মিনিট : ${toBengali(diff % 60)} সেকেন্ড`;
+    const quotes = [
+        { t: "নিশ্চয়ই সালাত অশ্লীল ও মন্দ কাজ থেকে বিরত রাখে।", a: "আল-কুরআন (২৯:৪৫)" },
+        { t: "দৃষ্টি হলো শয়তানের বিষাক্ত তীরগুলোর একটি।", a: "হাদিস শরীফ" },
+        { t: "পাপের স্বাদ ক্ষণস্থায়ী, কিন্তু তার শাস্তি দীর্ঘস্থায়ী।", a: "ইসলামিক উক্তি" },
+        { t: "তোমাদের মধ্যে সেই উত্তম যে নিজের প্রবৃত্তিকে দমন করে।", a: "হাদিস শরীফ" },
+        { t: "ধৈর্য হলো আলো স্বরূপ।", a: "সহীহ মুসলিম" }
+    ];
 
-        let currentIdx = 0;
-        levels.forEach((lvl, idx) => { if (diff >= lvl.time) currentIdx = idx; });
-        document.getElementById('badge').innerText = levels[currentIdx].name;
+    function handleAdminAccess() {
+        if (prompt("অ্যাডমিন পাসওয়ার্ড:") === "68156094") document.getElementById('adminModal').style.display = "block";
+    }
 
-        let prog = 0;
-        if (currentIdx < levels.length - 1) {
-            prog = ((diff - levels[currentIdx].time) / (levels[currentIdx+1].time - levels[currentIdx].time)) * 100;
-            document.getElementById('startLevel').innerText = levels[currentIdx].name.split(' ')[1] || "শুরু";
-            document.getElementById('nextLevel').innerText = levels[currentIdx+1].name.split(' ')[1];
-        } else {
-            prog = 100;
-            document.getElementById('startLevel').innerText = "কিংবদন্তি";
-            document.getElementById('nextLevel').innerText = "অনন্ত";
-        }
-        document.getElementById('progressBar').style.width = prog + "%";
-        document.getElementById('walkerIcon').style.left = prog + "%";
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    function openResetModal() { document.getElementById('resetModal').style.display = "block"; }
+
+    function confirmReset() {
+        const note = document.getElementById('resetNoteInput').value || "কোনো নোট নেই";
+        const now = new Date();
+        const date = now.toLocaleDateString('bn-BD') + " | " + now.toLocaleTimeString('bn-BD');
+        let history = JSON.parse(localStorage.getItem('onirbanHistory') || "[]");
+        history.unshift({ date: date, note: note });
+        localStorage.setItem('onirbanHistory', JSON.stringify(history));
+        localStorage.removeItem('onirbanStartTime');
+        location.reload();
+    }
+
+    function showHistory() {
+        const history = JSON.parse(localStorage.getItem('onirbanHistory') || "[]");
+        const list = document.getElementById('historyList');
+        list.innerHTML = history.length ? "" : "কোনো ইতিহাস নেই।";
+        history.forEach(item => {
+            list.innerHTML += `<div class="history-item" style="flex-direction:column; align-items:flex-start;"><div><span style="font-size:0.75rem; color:#00ffcc; font-weight:700;">${item.date}</span></div><div style="margin-top:5px;">${item.note}</div></div>`;
+        });
+        document.getElementById('historyModal').style.display = "block";
     }
 
     function showBadgeDetails() {
@@ -176,20 +171,39 @@
             const timeStr = lvl.time === 0 ? "০ মি." : (lvl.time === 60 ? "১ মি." : (lvl.time/86400)+" দিন");
             list.innerHTML += `<div class="roadmap-item ${isAchieved?'achieved':''}"><span>${lvl.name}</span><span>${toBengali(timeStr)}</span></div>`;
         });
-        document.getElementById('badgeModal').style.display = "block";
+        document.getElementById('roadmapModal').style.display = "block";
     }
 
-    function closeModal() { document.getElementById('badgeModal').style.display = "none"; }
-    function resetStreak() { if(confirm("সব রেকর্ড মুছে নতুন করে শুরু করবেন?")) { localStorage.clear(); location.reload(); } }
+    function setAdminTime() {
+        let totalMs = (parseInt(document.getElementById('admDays').value||0) * 86400000) + (parseInt(document.getElementById('admHours').value||0) * 3600000);
+        localStorage.setItem('onirbanStartTime', new Date().getTime() - totalMs);
+        location.reload();
+    }
+
+    function confettiEffect() { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
+
+    function updateApp() {
+        let start = localStorage.getItem('onirbanStartTime') || new Date().getTime();
+        if(!localStorage.getItem('onirbanStartTime')) localStorage.setItem('onirbanStartTime', start);
+        const diff = Math.floor((new Date().getTime() - start) / 1000);
+        
+        document.getElementById('days').innerText = toBengali(Math.floor(diff / 86400));
+        document.getElementById('time-detail').innerText = `${toBengali(Math.floor((diff % 86400) / 3600))} ঘণ্টা : ${toBengali(Math.floor((diff % 3600) / 60))} মিনিট : ${toBengali(diff % 60)} সেকেন্ড`;
+        
+        let cur = 0; levels.forEach((l, i) => { if(diff >= l.time) cur = i; });
+        document.getElementById('badge').innerText = levels[cur].name;
+        
+        let next = cur < levels.length - 1 ? levels[cur+1] : null;
+        let p = next ? ((diff - levels[cur].time) / (next.time - levels[cur].time)) * 100 : 100;
+        document.getElementById('progressBar').style.width = p + "%";
+        document.getElementById('walkerIcon').style.left = p + "%";
+        document.getElementById('startLevel').innerText = levels[cur].name.split(' ')[1];
+        document.getElementById('nextLevel').innerText = next ? next.name.split(' ')[1] : "অনন্ত";
+    }
 
     setInterval(updateApp, 1000);
     updateApp();
 
-    const quotes = [
-        { t: "সালাত অশ্লীল কাজ থেকে বিরত রাখে।", a: "আল-কুরআন" },
-        { t: "দৃষ্টি শয়তানের বিষাক্ত তীর।", a: "হাদিস" },
-        { t: "ধৈর্যই হলো সাফল্যের চাবিকাঠি।", a: "উক্তি" }
-    ];
     window.onload = () => {
         let r = Math.floor(Math.random() * quotes.length);
         document.getElementById('quoteText').innerText = `"${quotes[r].t}"`;
