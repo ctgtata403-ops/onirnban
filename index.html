@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অনির্বাণ - ব্যাজ রোডম্যাপ</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Anek Bangla', sans-serif;
+            background: radial-gradient(circle at center, #0a1f1a 0%, #040d0b 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .card {
+            text-align: center;
+            background: rgba(10, 31, 26, 0.6);
+            padding: 40px 25px;
+            border-radius: 40px;
+            width: 350px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 150, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        #badge {
+            font-size: 0.85rem;
+            background: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            padding: 6px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            cursor: pointer;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        h1 { font-weight: 800; font-size: 2.2rem; margin: 15px 0 20px; background: linear-gradient(to right, #ffffff, #00ffcc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 45px 0 25px;
+        }
+
+        .lvl-label {
+            font-size: 0.75rem;
+            color: rgba(0, 255, 204, 0.5);
+            font-weight: 700;
+            white-space: nowrap;
+            width: 55px;
+        }
+
+        .progress-wrapper { position: relative; flex-grow: 1; }
+        .progress-container { width: 100%; background: rgba(255, 255, 255, 0.05); border-radius: 10px; height: 8px; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(to right, #00ffcc, #ffffff); transition: width 1s linear; }
+        
+        .walker-icon { position: absolute; top: -38px; left: 0%; width: 40px; height: 40px; transform: translateX(-50%); transition: left 1s linear; filter: drop-shadow(0 0 5px #00ffcc); }
+        .walker-icon img { width: 100%; height: 100%; filter: invert(1) sepia(1) saturate(5) hue-rotate(120deg); }
+
+        .days-number { 
+            font-size: 7.5rem; 
+            font-weight: 800; 
+            line-height: 1; 
+            display: block; 
+            background: linear-gradient(to bottom, #ffffff 40%, #004d40 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        .sub-counter { 
+            font-size: 1.15rem; 
+            color: #ffffff; 
+            margin: 25px 0; 
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        button.reset-btn { 
+            font-family: 'Anek Bangla'; 
+            background: transparent; 
+            color: #00ffcc; 
+            border: 1px solid rgba(0, 255, 204, 0.4); 
+            padding: 16px; 
+            border-radius: 18px; 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            width: 100%; 
+        }
+        button.reset-btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 25px rgba(0, 255, 204, 0.5); }
+
+        /* পপ-আপ মোডাল স্টাইল */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(8px); }
+        .modal-content { background: #0a1f1a; margin: 10% auto; padding: 25px; border: 1px solid #00ffcc; width: 85%; max-width: 320px; border-radius: 30px; text-align: left; }
+        
+        .roadmap-title { color: #00ffcc; font-size: 1.2rem; font-weight: 800; margin-bottom: 15px; border-bottom: 1px solid rgba(0, 255, 204, 0.2); padding-bottom: 8px; }
+        
+        .badge-roadmap { margin-top: 15px; }
+        .roadmap-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .roadmap-item:last-child { border-bottom: none; }
+        .roadmap-name { font-size: 0.95rem; color: #bbb; }
+        .roadmap-time { font-size: 0.8rem; color: #666; font-weight: 700; }
+        
+        /* অর্জিত ব্যাজের জন্য হাইলাইট */
+        .roadmap-item.achieved .roadmap-name { color: #00ffcc; font-weight: 700; }
+        .roadmap-item.achieved .roadmap-time { color: #00ffcc; }
+
+        .close-btn { margin-top: 20px; background: #00ffcc; color: #000; border: none; padding: 14px; width: 100%; border-radius: 15px; font-weight: 700; cursor: pointer; font-family: 'Anek Bangla'; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div style="margin-bottom: 5px;"><span id="badge" onclick="showBadgeDetails()">যাত্রা শুরু</span></div>
+    <h1>অনির্বাণ</h1>
+    
+    <div class="progress-section">
+        <span class="lvl-label" id="startLevel">শুরু</span>
+        <div class="progress-wrapper">
+            <div class="walker-icon" id="walkerIcon">
+                <img src="https://cdn-icons-png.flaticon.com/512/16419/16419629.png" alt="Walking Man">
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+        <span class="lvl-label" id="nextLevel" style="text-align: right;">নবিশ</span>
+    </div>
+
+    <div class="main-counter">
+        <span class="days-number" id="days">০</span>
+        <span style="color:rgba(255,255,255,0.15); font-weight:600; font-size: 1rem;">অতিক্রান্ত দিন</span>
+    </div>
+
+    <div class="sub-counter" id="time-detail">০ ঘণ্টা : ০ মিনিট : ০ সেকেন্ড</div>
+    <button class="reset-btn" onclick="resetStreak()">রিসেট স্ট্রিক</button>
+</div>
+
+<div id="badgeModal" class="modal">
+    <div class="modal-content">
+        <div class="roadmap-title" id="currentTitle">ব্যাজ রোডম্যাপ</div>
+        <p id="currentDesc" style="color: #ccc; font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;"></p>
+        
+        <div class="badge-roadmap" id="roadmapList">
+            </div>
+        
+        <button class="close-btn" onclick="closeModal()">ঠিক আছে</button>
+    </div>
+</div>
+
+<script>
+    function toBengali(num) { return num.toLocaleString('bn-BD'); }
+
+    const levels = [
+        { name: "🌑 নতুন যাত্রা", time: 0, desc: "আপনার আত্মউন্নয়নের শিখা মাত্র জ্বলে উঠল। ধৈর্য ধরুন।" },
+        { name: "🌱 নবিশ", time: 60, desc: "অভিনন্দন! আপনি প্রথম বাধা অতিক্রম করে নবিশ হয়েছেন।" },
+        { name: "⚔️ যোদ্ধা", time: 3 * 86400, desc: "আপনি একজন সাহসী যোদ্ধা। আপনি ৩ দিন সফলভাবে পার করেছেন।" },
+        { name: "🔥 অজেয়", time: 7 * 86400, desc: "এক সপ্তাহ পূর্ণ! আপনার ইচ্ছাশক্তি এখন অজেয় ও শক্তিশালী।" },
+        { name: "🏆 কিংবদন্তি", time: 30 * 86400, desc: "৩০ দিনের মাইলফলক! আপনি এখন একজন কিংবদন্তি।" }
+    ];
+
+    function updateApp() {
+        let startTime = localStorage.getItem('onirbanStartTime');
+        if (!startTime) {
+            startTime = new Date().getTime();
+            localStorage.setItem('onirbanStartTime', startTime);
+        }
+
+        const now = new Date().getTime();
+        const diffInSec = Math.floor((now - startTime) / 1000);
+        
+        const d = Math.floor(diffInSec / (3600 * 24));
+        const h = Math.floor((diffInSec % (3600 * 24)) / 3600);
+        const m = Math.floor((diffInSec % 3600) / 60);
+        const s = diffInSec % 60;
+
+        document.getElementById('days').innerText = toBengali(d);
+        document.getElementById('time-detail').innerText = `${toBengali(h)} ঘণ্টা : ${toBengali(m)} মিনিট : ${toBengali(s)} সেকেন্ড`;
+
+        let currentIdx = 0;
+        levels.forEach((lvl, idx) => { if (diffInSec >= lvl.time) currentIdx = idx; });
+
+        document.getElementById('badge').innerText = levels[currentIdx].name;
+
+        let progress = 0;
+        if (currentIdx < levels.length - 1) {
+            const range = levels[currentIdx+1].time - levels[currentIdx].time;
+            const elapsed = diffInSec - levels[currentIdx].time;
+            progress = (elapsed / range) * 100;
+            document.getElementById('startLevel').innerText = levels[currentIdx].name.split(' ')[1] || "শুরু";
+            document.getElementById('nextLevel').innerText = levels[currentIdx+1].name.split(' ')[1];
+        } else {
+            progress = 100;
+            document.getElementById('startLevel').innerText = "কিংবদন্তি";
+            document.getElementById('nextLevel').innerText = "অনন্ত";
+        }
+
+        document.getElementById('progressBar').style.width = progress + "%";
+        document.getElementById('walkerIcon').style.left = progress + "%";
+    }
+
+    function showBadgeDetails() {
+        const startTime = localStorage.getItem('onirbanStartTime');
+        const diffInSec = Math.floor((new Date().getTime() - startTime) / 1000);
+        
+        let currentIdx = 0;
+        levels.forEach((lvl, idx) => { if (diffInSec >= lvl.time) currentIdx = idx; });
+
+        document.getElementById('currentTitle').innerText = levels[currentIdx].name;
+        document.getElementById('currentDesc').innerText = levels[currentIdx].desc;
+
+        const roadmapList = document.getElementById('roadmapList');
+        roadmapList.innerHTML = '';
+
+        levels.forEach((lvl, idx) => {
+            const isAchieved = diffInSec >= lvl.time;
+            const item = document.createElement('div');
+            item.className = `roadmap-item ${isAchieved ? 'achieved' : ''}`;
+            
+            const timeLabel = lvl.time === 0 ? "০ মিনিট" : (lvl.time === 60 ? "১ মিনিট" : (lvl.time / 86400) + " দিন");
+            
+            item.innerHTML = `
+                <span class="roadmap-name">${lvl.name}</span>
+                <span class="roadmap-time">${toBengali(timeLabel)}</span>
+            `;
+            roadmapList.appendChild(item);
+        });
+
+        document.getElementById('badgeModal').style.display = "block";
+    }
+
+    function closeModal() { document.getElementById('badgeModal').style.display = "none"; }
+    function resetStreak() { if(confirm("সব রেকর্ড মুছে নতুন করে শুরু করবেন?")) { localStorage.clear(); updateApp(); } }
+
+    setInterval(updateApp, 1000);
+    updateApp();
+</script>
+
+</body>
+</html>
